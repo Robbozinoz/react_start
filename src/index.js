@@ -3,10 +3,22 @@ import ReactDOM from 'react-dom';
 import './index.css';
 
 class Square extends React.Component {
+    //Initialise a constructor to give access to the state
+    constructor(props) {
+        super(props);
+        this.state = {
+            value: null,
+        };
+    }
+
+    //Render the square and use an ES6 function to enable a click alert
     render() {
       return (
-        <button className="square">
-          {this.props.value}
+        <button 
+            className="square" 
+            onClick={() => this.setState({value: 'X'})}
+        >
+            {this.state.value}
         </button>
       );
     }
