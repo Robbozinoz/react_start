@@ -2,27 +2,7 @@ import React from "react";
 import ReactDOM from 'react-dom';
 import './index.css';
 
-// class Square extends React.Component {
-//     //Initialise a constructor to give access to the state
-//     // constructor(props) {
-//     //     super(props);
-//     //     this.state = {
-//     //         value: null,
-//     //     };
-//     // }
-
-//     //Render the square and use an ES6 function to enable a click alert
-//     render() {
-//       return (
-//         <button 
-//             className="square" 
-//             onClick={() => this.props.onClick()}
-//         >
-//             {this.props.value}
-//         </button>
-//       );
-//     }
-//   }
+//Function to deliver state from Board class
 function Square(props) {
     return (
         <button className= "square" onClick={props.onClick}>
@@ -37,14 +17,19 @@ class Board extends React.Component {
         super(props);
         this.state = {
             squares: Array(9).fill(null),
+            xIsNext: true,
         };
     }
 
     //Definition of handleClick function which will send the props value to square class
     handleClick(i) {
         const squares = this.state.squares.slice();
-        squares[i] = 'x';
-        this.setState({squares: squares});
+        //Change the value of the xIsNext boolean
+        squares[i] = this.state.xIsNext ? 'X' : 'O';
+        this.setState({
+            squares: squares,
+            xIsNext: !this.state.xIsNext,
+        });
     }
 
     renderSquare(i) {
@@ -57,7 +42,17 @@ class Board extends React.Component {
     }
 
     render() {
-        const status = 'Next player: X';
+        //Give winner object the value of the square[a] in calculateWinner function
+        const winner = calculateWinner(this.state.squares);
+        let status;
+        console.log(winner);
+        //Check for a winner before indicating who is next to go
+        if (winner) {
+            status = 'Winner: ' + winner;
+        } else {
+            //Take the state of the xIsNext boolean to define the next player to go
+            status = 'Next player: ' + (this.state.xIsNext ? 'X' : 'O');
+        }
 
         return (
         <div>
@@ -104,4 +99,25 @@ ReactDOM.render(
 <Game />,
 document.getElementById('root')
 );
+
+//Function to loop through squares to determine who won, this for loop takes an array of three square values and compares all lines objecs in the array for equal values , so determining a winner
+function calculateWinner(squares) {
+    const lines = [
+        [0, 1, 2],
+        [3, 4, 5],
+        [6, 7, 8],
+        [0, 3, 6],
+        [1, 4, 7],
+        [2, 5, 8],
+        [0, 4, 8],
+        [2, 4, 6],
+      ];
+      for (let i = 0; i < lines.length; i++) {
+          const [a, b, c] = lines[i];
+          if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {
+              return squares[a];
+          }
+      }
+      return null;
+}
   
