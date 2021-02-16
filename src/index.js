@@ -74,13 +74,16 @@ class Game extends React.Component {
             history: [{
                 squares: Array(9).fill(null),
             }],
+            //Instantiate a variable we can use to reference when calling jumpTo function
+            stepNumber: 0,
             xIsNext: true,
         };
     }
 
     //Definition of handleClick function which will send the props value to square class
     handleClick(i) {
-        const history = this.state.history;
+        const history = this.state.history.slice(0, this.state.stepNumber + 1);
+        console.log(history);
         const current = history[history.length - 1];
         const squares = current.squares.slice();
         if (calculateWinner(squares) || squares[i]) {
@@ -91,14 +94,23 @@ class Game extends React.Component {
           history: history.concat([{
             squares: squares,
           }]),
+          stepNumber: history.length,
           xIsNext: !this.state.xIsNext,
+        });
+    }
+
+    //Method to navigate the histroy states gathered in Game
+    jumpTo(step) {
+        this.setState({
+            stepNumber: step,
+            xIsNext: (step % 2) === 0,
         });
     }
 
     render() {
         const history = this.state.history;
         //Assign the latest history to the current object to apply to the Board class
-        const current = history[history.length - 1];
+        const current = history[this.state.stepNumber];
         //Keep the current winner object updates with the value from the winner check function
         const winner = calculateWinner(current.squares);
 
