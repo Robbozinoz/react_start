@@ -97,12 +97,22 @@ class Game extends React.Component {
 
     render() {
         const history = this.state.history;
-        //Assign the latest history to the current object
+        //Assign the latest history to the current object to apply to the Board class
         const current = history[history.length - 1];
         //Keep the current winner object updates with the value from the winner check function
         const winner = calculateWinner(current.squares);
 
-        
+        const moves = history.map((step, move) => {
+            const desc = move ?
+            'Go to move #' + move :
+            'Go to game start';
+            return (
+                <li key={move}>
+                    <button onClick={() => this.jumpTo(move)}>{desc}</button>
+                </li>
+            );
+        });
+
         let status;
         if (winner) {
             status = 'Winner: ' + winner;
@@ -120,7 +130,7 @@ class Game extends React.Component {
             </div>
             <div className="game-info">
             <div>{status}</div>
-            <ol>{/* TODO */}</ol>
+            <ol>{moves}</ol>
             </div>
         </div>
         );
