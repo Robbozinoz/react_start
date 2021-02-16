@@ -2,27 +2,34 @@ import React from "react";
 import ReactDOM from 'react-dom';
 import './index.css';
 
-class Square extends React.Component {
-    //Initialise a constructor to give access to the state
-    // constructor(props) {
-    //     super(props);
-    //     this.state = {
-    //         value: null,
-    //     };
-    // }
+// class Square extends React.Component {
+//     //Initialise a constructor to give access to the state
+//     // constructor(props) {
+//     //     super(props);
+//     //     this.state = {
+//     //         value: null,
+//     //     };
+//     // }
 
-    //Render the square and use an ES6 function to enable a click alert
-    render() {
-      return (
-        <button 
-            className="square" 
-            onClick={() => this.props.onClick()}
-        >
-            {this.props.value}
+//     //Render the square and use an ES6 function to enable a click alert
+//     render() {
+//       return (
+//         <button 
+//             className="square" 
+//             onClick={() => this.props.onClick()}
+//         >
+//             {this.props.value}
+//         </button>
+//       );
+//     }
+//   }
+function Square(props) {
+    return (
+        <button className= "square" onClick={props.onClick}>
+            {props.value}
         </button>
-      );
-    }
-  }
+    );
+}
   
 class Board extends React.Component {
     //Lift the state of eahc square and place in the parent componenet for retrieval
@@ -31,6 +38,13 @@ class Board extends React.Component {
         this.state = {
             squares: Array(9).fill(null),
         };
+    }
+
+    //Definition of handleClick function which will send the props value to square class
+    handleClick(i) {
+        const squares = this.state.squares.slice();
+        squares[i] = 'x';
+        this.setState({squares: squares});
     }
 
     renderSquare(i) {
