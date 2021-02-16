@@ -101,6 +101,8 @@ class Game extends React.Component {
         const current = history[history.length - 1];
         //Keep the current winner object updates with the value from the winner check function
         const winner = calculateWinner(current.squares);
+
+        
         let status;
         if (winner) {
             status = 'Winner: ' + winner;
